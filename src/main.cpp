@@ -1,26 +1,36 @@
 #include <Arduino.h>
 
-int soundSensor=2;
-int LED=4;
-boolean LEDStatus=false;
+int Sensor = A0;
+int Relay = 2;
+int Lamp = 13;
+
+
+unsigned long time;
+
+boolean status_lights = false;
 
 void setup() {
-  pinMode(soundSensor,INPUT);
-  pinMode(LED,OUTPUT);
+  pinMode(Sensor, INPUT);
+  pinMode(Lamp, OUTPUT);
+  pinMode(Relay, OUTPUT);
   Serial.begin(9600);
 }
 
 void loop() {
-  int SensorData=analogRead(soundSensor);
-  if(SensorData==1){
-    if(LEDStatus==false){
-      LEDStatus=true;
-      digitalWrite(LED,HIGH);
+  int status_sensor = analogRead(Sensor);
+  if (status_sensor > 33) {
+    time = millis();
+    if (status_lights == false) {
+      status_lights = true;
+      digitalWrite(Lamp, HIGH);
+      //delay(5000);
+      //digitalWrite(Relay, HIGH);
     }
-    else{
-      LEDStatus=false;
-      digitalWrite(LED,LOW);
-    }
+    //else {
+      //status_lights = false;
+      //digitalWrite(Lamp, LOW);
+      //delay(100);
+    //}
   }
-  Serial.println(SensorData);
+  Serial.println(time);
 }
